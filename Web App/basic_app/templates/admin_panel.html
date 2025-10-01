@@ -1,0 +1,168 @@
+<!-- templates/admin_panel.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!--<link rel="stylesheet" href="/static/styles.css">-->
+</head>
+<body>
+    <div class="head">
+        <img src="/static/logo.jpg" alt="iTi" style="width:120px;height:150px;">
+        <form method="post" action="/logout">
+    <button class="log-out" type="submit" name="action" value="state">Log Out</button>
+    </form>
+    </div>
+    <h1 class="usr_dash">Admin Panel</h1>
+    <p class="usr_dash_info">You are logged in as: <strong>{{ username }}</strong></p>
+    
+    <!--<form method="POST" action="/submit2">
+        <textarea name="sql_query" rows="10" cols="80" placeholder="Enter your SQL query here..."></textarea><br>
+        <button type="submit" name="action", value="sql">Execute Query</button>
+    </form>-->
+</div>
+    <div class="container">
+        <h2 class="container_header">Instructor Operations:</h2>
+        <div class="btn-group">
+            <form method="post">
+            <button class= "update_btn" type="button" name="action" value="insert_Instructor" onclick="openInsert_ins_Form()">Insert New Instructor</button>
+            <button class= "update_btn" type="button" name="action" value="delete_Instructor" onclick="openDelete_ins_Form()">Delete Instructor</button>
+            </form>
+        </div>
+    </div>
+
+        <div class="container">
+        <h2 class="container_header">Student Operations:</h2>
+        <div class="btn-group">
+            <form method="post">
+            <button class= "update_btn" type="button" name="action" value="Student" onclick="openInsert_stu_Form()">Insert New Student</button>
+            <button class= "update_btn" type="button" name="action" value="Student" onclick="openDelete_stu_Form()">Delete Student</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="insert_instructor_popupForm" class="popup-form">
+    <form class="form-content" method="POST" action="/insert_new_instructor">
+      <h3>Enter Details</h3>
+      <input type="text" name="instructor_name" placeholder="Instructor Name">
+      <input type="email" name="instructor_email" placeholder="Instructor Email">
+      <input type="text" name="address" placeholder="Address">
+      <input type="number" name="salary" placeholder="Salary">
+      <input type="date" name="birth_date" placeholder="Birth Date">
+        <div class="gender-group">
+            <label><input type="radio" name="gender" value="male" required> Male</label>
+            <label><input type="radio" name="gender" value="female"> Female</label>
+        </div>
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeInsert_ins_Form()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+
+    <div id="delete_instructor_popupForm" class="popup-form">
+    <form class="form-content" method="POST" action="/delete_instructor">
+      <h3>Enter Details</h3>
+      <input type="text" name="instructor_id" placeholder="Ins_ID">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeDelete_ins_Form()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+
+    <div id="delete_student_popupForm" class="popup-form">
+    <form class="form-content" method="POST" action="/delete_student">
+      <h3>Enter Details</h3>
+      <input type="text" name="student" placeholder="Student_ID">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeDelete_stu_Form()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+    <div id="insert_student_popupForm" class="popup-form">
+    <form class="form-content" method="POST" action="/insert_new_student">
+      <h3>Enter Details</h3>
+      <input type="text" name="student_name" placeholder="Student Name">
+      <input type="email" name="student_email" placeholder="Student Email">
+      <input type="text" name="state" placeholder="State">
+      <input type="text" name="city" placeholder="City">
+      <input type="text" name="street" placeholder="Street">
+      <input type="text" name="linkedin" placeholder="LinkedIn">
+      <input type="number" name="intake" placeholder="Intake">
+      <input type="number" name="track" placeholder="Track">
+      <input type="number" name="Branch" placeholder="Branch">
+      <input type="date" name="birth_date" placeholder="Birth Date">
+        <div class="gender-group">
+            <label><input type="radio" name="gender" value="male" required> Male</label>
+            <label><input type="radio" name="gender" value="female"> Female</label>
+        </div>
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeInsert_stu_Form()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+
+    
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% if msg %}
+        <p style="color:red;">{{ msg }}</p>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+    {% if rows %}
+        <h3>Results:</h3>
+        <table>
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for column in columns %}
+                            <td>{{ row[column] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if result %}
+    <pre>{{ result }}</pre>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!-- templates/query_results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Query Results</h1>
+
+    {% if msg %}
+        <p style="color:red;">{{ msg }}</p>
+    {% endif %}
+
+    {% if rows %}
+        <table>
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for column in columns %}
+                            <td>{{ row[column] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No results found or the query wasn't a SELECT query.</p>
+    {% endif %}
+
+
+
+</body>
+</html>

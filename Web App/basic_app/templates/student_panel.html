@@ -1,0 +1,159 @@
+<!-- templates/user_panel.html -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="head">
+    <img src="/static/logo.jpg" alt="iTi" style="width:120px;height:150px;">
+    <form method="post" action="/logout">
+    <button class="log-out" type="submit">Log Out</button>
+    </form>
+    </div>
+       {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul id="flash-messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+    <!--<p>Enter a number to fetch your data:</p>-->
+
+    <!-- User Input Form -->
+    <!--<form action="{{ url_for('student_panel') }}" method="POST">
+        <label for="input_number">Number:</label>
+        <input type="number" id="input_number" name="input_number" required>
+        <button type="submit">Fetch Data</button>
+    </form>-->
+<h1 class="usr_dash">Welcome, {{ username }}</h1>  
+
+<div class="stu_all">
+
+    <div class="stu_info">
+<h2 style="color: #cf3e3e; margin-bottom: 2%; font-size: xx-large; text-decoration: underline;">Personal Info</h2>
+
+        <form method="post">
+        <h3 class="detail">ID: {{id}}</h3>
+        <h3 class="detail">Email: {{email}}</h3>
+        <h3 class="detail">State: {{state}}
+            <button class="update_btn" type="button" name="action" value="state" onclick="openUpdate_stu_state()">Update State</button>
+        </h3>
+        <h3 class="detail">City: {{city}}
+            <button class="update_btn" type="button" name="action" value="city" onclick="openUpdate_stu_city()">Update City</button>
+        </h3>
+        <h3 class="detail">Street: {{street}}
+            <button class="update_btn" type="button" name="action" value="street" onclick="openUpdate_stu_street()">Update Street</button>
+        </h3>
+        <h3 class="detail">Birth Date: {{bdate}}</h3>
+        <h3 class="detail">LinkedIn: {{linkedin}}
+            <button class="update_btn" type="button" name="action" value="linkedin" onclick="openUpdate_stu_LK()">Update LinkedIn Account</button>
+        </h3>
+        <h3 class="detail">Track: {{track}}</h3>
+        </form>
+
+</div>
+<div class="examss">
+    <div class="exams_bar">
+        <h3 class="ex_headers">Exams Taken</h3>
+            <div class="ex_tkn">
+                <h2>{% for exam, grade in taken_exams.items() %}</h2>
+                <p class="ex_name">Exam ID: {{ exam }}    Grade: {{ grade }}</p>
+                {% endfor %}
+            </div>
+    
+    {% if left_exams.length != 0 %}
+    <h3 class="ex_headers">Exams Left</h3>
+    <div class="ex_tkn">
+        {% for exam, duration in left_exams.items() %}
+            <div class="ex_details">
+                <p class="ex_name">Exam ID: {{ exam }}</p>
+                <form method="POST" action="/get_exam">
+                    <button class="update_btn" type="submit" name="exam_id" value="{{ exam }}">Take Exam</button>
+                    <input type="hidden" name="duration" placeholder="{{ duration }}">
+                </form>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+</div>
+</div>
+</div>
+
+    <div id="stu_update_state" class="popup-form">
+    <form class="form-content" method="POST" action="/update_stu_state">
+      <h3>New value</h3>
+      <input type="text" name="field" placeholder="field">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeUpdate_stu_state()">Cancel</button>
+        </div>
+    </form>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+        <div id="stu_update_city" class="popup-form">
+    <form class="form-content" method="POST" action="/update_stu_city">
+      <h3>Enter Details</h3>
+      <input type="text" name="field" placeholder="field">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeUpdate_stu_city()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+            <div id="stu_update_street" class="popup-form">
+    <form class="form-content" method="POST" action="/update_stu_street">
+      <h3>Enter Details</h3>
+      <input type="text" name="field" placeholder="field">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeUpdate_stu_street()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+        <div id="stu_update_lk" class="popup-form">
+    <form class="form-content" method="POST" action="/update_stu_linkedin">
+      <h3>New value</h3>
+      <input type="text" name="field" placeholder="field">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeUpdate_stu_LK()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+    <!-- Display Results -->
+    {% if result %}
+        <h3>Fetched Data:</h3>
+        <div class="result-container">
+            {% for key, value in result.items() %}
+                <p><strong>{{ key }}:</strong> {{ value }}</p>
+            {% endfor %}
+        </div>
+    {% elif msg %}
+        <p style="color:red;">{{ msg }}</p>
+    {% endif %}
+</body>
+</html>

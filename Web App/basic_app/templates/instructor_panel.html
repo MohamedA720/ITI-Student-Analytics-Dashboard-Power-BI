@@ -1,0 +1,113 @@
+<!-- templates/user_panel.html -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="head">
+    <img src="/static/logo.jpg" alt="iTi" style="width:120px;height:150px;">
+    
+    <form method="post" action="/logout">
+    <button class="log-out" type="submit" name="action" value="state">Log Out</button>
+    </form>   
+    </div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul id="flash-messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+    <!--<p>Enter a number to fetch your data:</p>-->
+    
+    <h1 class="usr_dash">Welcome, {{ username }}</h1>
+
+    <!-- User Input Form -->
+    <!--<form action="{{ url_for('student_panel') }}" method="POST">
+        <label for="input_number">Number:</label>
+        <input type="number" id="input_number" name="input_number" required>
+        <button type="submit">Fetch Data</button>
+    </form>-->
+    <div>
+<h2 style="color: #cf3e3e; margin-bottom: 2%; margin-top: 3%;  font-size: xx-large; text-decoration: underline;">Personal Info</h2>
+        <form method="post">
+        <h3 class="detail">Hire Date: {{hdate}}</h3>
+        <h3 class="detail">Email: {{email}}</h3>
+        <h3 class="detail">Address: {{address}}
+            <button class="update_btn" type="button" name="action" value="state" onclick="openUpdateAddress_ins()">Update Address</button>
+        </h3>
+        <h3 class="detail">Birth Date: {{bdate}}</h3>
+        <!--<h3 class="detail">Courses: {{course}}</h3>-->
+        </form>
+    </div>
+    <div class="extra">
+    <h2 style="color: #cf3e3e; margin-bottom: 2%; margin-top: 3%; font-size: xx-large; text-decoration: underline;">Courses</h2>
+        {% for item in course %}
+            <div class="ex_details2">
+                <p class="ex_name">{{ item }}</p>
+                <form method="POST">
+                    <button class="update_btn" type="button" name="crs_name" value="{{ item }}" onclick="openGenerateExam('{{item}}')">Generate Exam</button>
+                </form>
+            </div>
+        {% endfor %}
+        </div>
+
+
+    <div id="ins_update_address" class="popup-form">
+    <form class="form-content" method="POST" action="/update_address">
+      <h3>New value</h3>
+      <input type="text" name="field" placeholder="field">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeUpdateAddress_ins()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+
+
+    <div id="generate_exam" class="popup-form">
+    <form class="form-content" method="POST" action="/generate_exam">
+      <h3>New value</h3>
+      <input type="number" name="TF" placeholder="Number of True/False Questions">
+      <input type="number" name="MCQ" placeholder="Number of MCQs">
+      <input type="number" name="duration" placeholder="Exam Duration">
+      <input type="hidden" name="crs_name">
+
+        <div class="form-actions">
+            <button onclick="submitForm()">Submit</button>
+            <button type="button" onclick="closeGenerateExam()">Cancel</button>
+        </div>
+    </form>
+    </div>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+
+    <!-- Display Results -->
+    {% if result %}
+        <h3>Fetched Data:</h3>
+        <div class="result-container">
+            {% for key, value in result.items() %}
+                <p><strong>{{ key }}:</strong> {{ value }}</p>
+            {% endfor %}
+        </div>
+    {% elif msg %}
+        <p style="color:red;">{{ msg }}</p>
+    {% endif %}
+</body>
+</html>

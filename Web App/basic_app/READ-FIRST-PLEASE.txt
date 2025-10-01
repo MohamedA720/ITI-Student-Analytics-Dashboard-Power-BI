@@ -1,0 +1,45 @@
+1- Install Flask and my-sql and pyodbc in vscode terminal
+
+pip install Flask
+pip install my-sql
+pip install pyodbc
+
+
+2- Make 2 logins on your database server with the following credentials:
+	a) username: group3	password: 123 --> CHECKLIST ALL PERMISSIONS
+	b) username: instructor_user	password: 123
+
+RUN in SSMS:
+GRANT EXECUTE ON GenerateExam to instructor_user;
+GRANT EXECUTE ON display_exam_q to instructor_user;
+GRANT EXECUTE ON UpdateIns to instructor_user;
+	
+
+	c) username: student_user	password: 123
+RUN in SSMS:
+GRANT SELECT, INSERT, DELETE, UPDATE ON Student TO student_user;
+GRANT SELECT, INSERT, DELETE, UPDATE ON Student_Exam_Quest TO student_user;
+GRANT SELECT ON Stu_Exam TO student_user;
+GRANT SELECT ON Question TO student_user;
+GRANT SELECT ON Qst_Choices TO student_user;
+GRANT EXECUTE ON display_Exam_Q TO student_user;
+GRANT SELECT ON EXAM TO student_user;
+GRANT EXECUTE ON answer_question TO student_user;
+GRANT EXECUTE ON correct_exam TO student_user;
+
+
+
+	
+3- Open config file and insert your database server and database name
+
+4- run in the terminal --> python app.py
+
+5- Connect to the localhost and test the app.
+
+6- Login with the student EMAIL and type any password and click login as student
+OR
+Login with the instructor EMAIL and type any password and click login as instructor
+OR
+Login with "group3" with password "123" and clock login as admin
+
+

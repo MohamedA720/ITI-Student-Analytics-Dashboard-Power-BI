@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<!--<script>
+setInterval(function() {
+  var distance = 1;
+  
+  var minutes = Math.floor(distance*60);
+  var secs = Math.floor(distance*60*60);
+  document.getElementById("demo").innerHTML = minutes + "m " + secs + 's';
+
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+  }
+}, 1000);
+</script>
+
+<p id="demo"></p>
+-->
+
+
+ <img src="/static/logo.jpg" alt="iTi" style="width:120px;height:150px;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul id="flash-messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+ <div class="exam_page_header">
+ <h1 style="color: #cf3e3e;">Exam</h1>
+ </div>
+ <div class="final_form">
+<form id="examForm" method="POST">
+        {% for key, value in exam.items() %}
+        <div class="form">
+            <p><strong>Question: {{ key }}</strong></p>
+            <div class="choices">
+                {% for value_ in value[0] %}
+                    <label class="choice">
+                        <input type="radio" name="{{ key }}" value="{{ value_ }}"> {{ value_ }}
+                    </label>
+                {% endfor %}
+            </div>
+            </div>
+        {% endfor %}
+        <input type="hidden" name="exam_id" value="{{ exam_id }}">
+        
+</form>
+    
+ <button class="submitbtn" type="submit" id="submitBtn" name="submit_answers">Submit Answers</button>
+ <script>
+document.getElementById('submitBtn').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const form = document.getElementById('examForm');
+    let data = {};
+
+    // Get the exam_id (assuming it's a hidden input outside the question loop)
+    data['exam_id'] = form.querySelector('input[name="exam_id"]').value;
+
+    // Get all the question divs
+    const questionDivs = form.querySelectorAll('.form');
+
+    questionDivs.forEach(questionDiv => {
+        // Extract the question text to use as the key
+        const questionText = questionDiv.querySelector('p strong').textContent.replace('Question: ', '').trim();
+
+        // Get all radio buttons for this specific question
+        const radioButtons = questionDiv.querySelectorAll('input[type="radio"]');
+        
+        let selectedIndex = -1; // Default to -1 if no option is selected
+        
+        // Find the selected radio button and its index
+        radioButtons.forEach((radio, index) => {
+            if (radio.checked) {
+                selectedIndex = index + 1; // +1 because array indices are 0-based, but you want 1-based numbering
+            }
+        });
+        
+        // Add the question and its selected index to the data object
+        data[questionText] = String(selectedIndex);
+    });
+
+    // Send data as JSON to Flask
+    fetch("{{ url_for('submit_test') }}", {
+        method: "POST",
+        body: JSON.stringify(data),  // Convert data to JSON format
+        headers: {
+            "Content-Type": "application/json"  // Set the content-type to JSON
+        }
+    })
+    .then(response => response.json())  // Parse the JSON response
+    .then(data => {
+        if (data.status === "success") {
+            // If the submission was successful, redirect to the student panel
+            window.location.href = "{{ url_for('student_panel') }}";
+        } else {
+            alert("There was an error submitting your answers. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    });
+});
+
+    </script>
+</div>
+</body>
+</html>

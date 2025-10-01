@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>StudentDataSource</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@student_id">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@exam_id">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText> SELECT 
+        q.Qst_Header AS Question_Text,
+        sq.Stu_Answer AS Student_Answer
+    FROM Student_Exam_Quest sq
+    INNER JOIN Question q ON q.Question_ID = sq.Question_ID
+    WHERE sq.Student_ID = @student_id 
+    AND sq.Exam_ID = @exam_id
+    ORDER BY q.Question_ID;</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="Question_Text">
+        <DataField>Question_Text</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Student_Answer">
+        <DataField>Student_Answer</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
